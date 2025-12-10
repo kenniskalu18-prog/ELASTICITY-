@@ -1,0 +1,1871 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PHY 103: Elasticity - Comprehensive Guide</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Roboto+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+    <style>
+        /* CSS Variables */
+        :root {
+            --primary: #2563eb;
+            --primary-dark: #1d4ed8;
+            --secondary: #7c3aed;
+            --secondary-dark: #6d28d9;
+            --accent: #06b6d4;
+            --accent-dark: #0891b2;
+            --bg-dark: #0f172a;
+            --bg-medium: #1e293b;
+            --bg-light: #334155;
+            --text-light: #f8fafc;
+            --text-gray: #cbd5e1;
+            --success: #10b981;
+            --error: #ef4444;
+            --warning: #f59e0b;
+            --border-radius: 12px;
+            --transition: all 0.3s ease;
+            --shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.3);
+            --shadow-light: 0 4px 6px -1px rgba(0, 0, 0, 0.2);
+        }
+        
+        /* Reset and Base Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        html {
+            scroll-behavior: smooth;
+        }
+        
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, var(--bg-dark) 0%, var(--bg-medium) 100%);
+            color: var(--text-light);
+            line-height: 1.6;
+            overflow-x: hidden;
+            position: relative;
+            min-height: 100vh;
+        }
+        
+        /* Animated Background */
+        .background-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            overflow: hidden;
+        }
+        
+        .floating-bubble {
+            position: absolute;
+            border-radius: 50%;
+            background: rgba(37, 99, 235, 0.1);
+            animation: float linear infinite;
+        }
+        
+        .physics-icon {
+            position: absolute;
+            font-size: 24px;
+            color: rgba(6, 182, 212, 0.4);
+            animation: floatRotate linear infinite;
+        }
+        
+        @keyframes float {
+            0% {
+                transform: translateY(0) translateX(0);
+            }
+            50% {
+                transform: translateY(-20px) translateX(10px);
+            }
+            100% {
+                transform: translateY(0) translateX(0);
+            }
+        }
+        
+        @keyframes floatRotate {
+            0% {
+                transform: translateY(0) translateX(0) rotate(0deg);
+            }
+            50% {
+                transform: translateY(-25px) translateX(15px) rotate(180deg);
+            }
+            100% {
+                transform: translateY(0) translateX(0) rotate(360deg);
+            }
+        }
+        
+        /* Layout */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        /* Header */
+        header {
+            padding: 30px 0;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .header-content {
+            position: relative;
+            z-index: 2;
+        }
+        
+        h1 {
+            font-size: 2.8rem;
+            margin-bottom: 10px;
+            background: linear-gradient(90deg, var(--primary), var(--accent));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            font-weight: 700;
+        }
+        
+        .subtitle {
+            font-size: 1.2rem;
+            color: var(--text-gray);
+            margin-bottom: 20px;
+        }
+        
+        .nav-tabs {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 30px;
+        }
+        
+        .nav-tab {
+            padding: 12px 24px;
+            background: rgba(30, 41, 59, 0.8);
+            border-radius: var(--border-radius);
+            color: var(--text-light);
+            text-decoration: none;
+            font-weight: 500;
+            transition: var(--transition);
+            border: 1px solid transparent;
+        }
+        
+        .nav-tab:hover {
+            background: rgba(37, 99, 235, 0.2);
+            border-color: var(--primary);
+            transform: translateY(-3px);
+        }
+        
+        .nav-tab.active {
+            background: var(--primary);
+        }
+        
+        /* Main Content */
+        .main-content {
+            display: flex;
+            flex-direction: column;
+            gap: 40px;
+            padding-bottom: 60px;
+        }
+        
+        .section {
+            background: rgba(30, 41, 59, 0.8);
+            border-radius: var(--border-radius);
+            padding: 30px;
+            box-shadow: var(--shadow);
+            transition: var(--transition);
+            opacity: 0;
+            transform: translateY(30px);
+            animation: fadeInUp 0.8s forwards;
+        }
+        
+        @keyframes fadeInUp {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .section:hover {
+            box-shadow: 0 15px 30px -5px rgba(0, 0, 0, 0.4);
+        }
+        
+        .section-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid var(--primary);
+        }
+        
+        .section-icon {
+            font-size: 28px;
+            margin-right: 15px;
+            color: var(--accent);
+        }
+        
+        h2 {
+            font-size: 1.8rem;
+            color: var(--text-light);
+        }
+        
+        h3 {
+            font-size: 1.4rem;
+            margin: 20px 0 15px;
+            color: var(--accent);
+        }
+        
+        p {
+            margin-bottom: 15px;
+            color: var(--text-gray);
+        }
+        
+        /* Formula Cards */
+        .formula-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+            margin: 25px 0;
+        }
+        
+        .formula-card {
+            background: rgba(15, 23, 42, 0.7);
+            border-radius: var(--border-radius);
+            padding: 20px;
+            border-left: 4px solid var(--secondary);
+        }
+        
+        .formula {
+            font-family: 'Roboto Mono', monospace;
+            font-size: 1.5rem;
+            color: var(--accent);
+            text-align: center;
+            padding: 15px;
+            background: rgba(6, 182, 212, 0.1);
+            border-radius: 8px;
+            margin: 15px 0;
+            overflow-x: auto;
+        }
+        
+        /* Diagram Containers */
+        .diagram-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+            margin: 25px 0;
+        }
+        
+        .diagram {
+            border-radius: var(--border-radius);
+            padding: 25px;
+            background: rgba(15, 23, 42, 0.7);
+            box-shadow: var(--shadow-light);
+            transition: var(--transition);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .diagram:hover {
+            transform: translateY(-5px);
+            border-color: var(--accent);
+        }
+        
+        .diagram-title {
+            font-size: 1.2rem;
+            color: var(--accent);
+            margin-bottom: 15px;
+            text-align: center;
+            font-weight: 600;
+        }
+        
+        .diagram-content {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .diagram-visual {
+            width: 100%;
+            height: 150px;
+            background: linear-gradient(135deg, rgba(37, 99, 235, 0.1), rgba(124, 58, 237, 0.1));
+            border-radius: 8px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 3rem;
+            color: var(--accent);
+        }
+        
+        .diagram-caption {
+            padding: 10px;
+            font-size: 0.9rem;
+            color: var(--text-gray);
+            text-align: center;
+            line-height: 1.5;
+        }
+        
+        /* Video Container */
+        .video-container {
+            position: relative;
+            width: 100%;
+            padding-bottom: 56.25%; /* 16:9 aspect ratio */
+            height: 0;
+            margin: 25px 0;
+            border-radius: var(--border-radius);
+            overflow: hidden;
+            box-shadow: var(--shadow);
+        }
+        
+        .video-container iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+        
+        /* Quiz Section */
+        #quiz-section {
+            display: none;
+        }
+        
+        .quiz-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid var(--secondary);
+        }
+        
+        .timer-container {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 1.2rem;
+            font-weight: 600;
+        }
+        
+        #timer {
+            font-family: 'Roboto Mono', monospace;
+            font-size: 1.5rem;
+            background: rgba(15, 23, 42, 0.8);
+            padding: 8px 16px;
+            border-radius: 8px;
+            min-width: 100px;
+            text-align: center;
+        }
+        
+        .timer-warning {
+            color: var(--error);
+            animation: pulse 1s infinite;
+        }
+        
+        @keyframes pulse {
+            0% { opacity: 1; }
+            50% { opacity: 0.7; }
+            100% { opacity: 1; }
+        }
+        
+        .progress-container {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        
+        .progress-bar {
+            flex-grow: 1;
+            height: 10px;
+            background: rgba(15, 23, 42, 0.7);
+            border-radius: 5px;
+            overflow: hidden;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary), var(--accent));
+            width: 0%;
+            transition: width 0.5s ease;
+        }
+        
+        /* Quiz Content */
+        .quiz-content {
+            display: none;
+        }
+        
+        .quiz-content.active {
+            display: block;
+        }
+        
+        .question-number {
+            color: var(--accent);
+            font-size: 1.1rem;
+            margin-bottom: 10px;
+        }
+        
+        .question-text {
+            font-size: 1.2rem;
+            margin-bottom: 25px;
+            line-height: 1.5;
+        }
+        
+        .options-container {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-bottom: 30px;
+        }
+        
+        .option {
+            padding: 15px 20px;
+            background: rgba(15, 23, 42, 0.7);
+            border-radius: var(--border-radius);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            cursor: pointer;
+            transition: var(--transition);
+        }
+        
+        .option:hover {
+            background: rgba(37, 99, 235, 0.2);
+            transform: translateX(5px);
+        }
+        
+        .option.selected {
+            background: rgba(37, 99, 235, 0.3);
+            border-color: var(--primary);
+        }
+        
+        .option.correct {
+            background: rgba(16, 185, 129, 0.3);
+            border-color: var(--success);
+        }
+        
+        .option.incorrect {
+            background: rgba(239, 68, 68, 0.3);
+            border-color: var(--error);
+        }
+        
+        .option-label {
+            font-weight: 600;
+            margin-right: 10px;
+            color: var(--accent);
+        }
+        
+        /* Quiz Navigation */
+        .quiz-navigation {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .quiz-btn {
+            padding: 12px 24px;
+            background: var(--primary);
+            color: white;
+            border: none;
+            border-radius: var(--border-radius);
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .quiz-btn:hover {
+            background: var(--primary-dark);
+            transform: translateY(-2px);
+        }
+        
+        .quiz-btn.secondary {
+            background: var(--bg-light);
+        }
+        
+        .quiz-btn.secondary:hover {
+            background: var(--bg-medium);
+        }
+        
+        .quiz-btn:disabled {
+            background: var(--bg-medium);
+            cursor: not-allowed;
+            opacity: 0.5;
+        }
+        
+        .flag-btn {
+            background: transparent;
+            border: none;
+            color: var(--warning);
+            cursor: pointer;
+            font-size: 1.2rem;
+            transition: var(--transition);
+        }
+        
+        .flag-btn.active {
+            color: var(--warning);
+        }
+        
+        /* Results Section */
+        #results-section {
+            display: none;
+        }
+        
+        .score-display {
+            text-align: center;
+            padding: 30px;
+            background: rgba(15, 23, 42, 0.7);
+            border-radius: var(--border-radius);
+            margin-bottom: 30px;
+        }
+        
+        .score-value {
+            font-size: 3.5rem;
+            font-weight: 700;
+            margin: 10px 0;
+            background: linear-gradient(90deg, var(--primary), var(--accent));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+        
+        .score-fraction {
+            font-size: 1.5rem;
+            color: var(--text-gray);
+            margin-bottom: 20px;
+        }
+        
+        .performance-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 20px;
+            margin: 30px 0;
+        }
+        
+        .performance-card {
+            background: rgba(15, 23, 42, 0.7);
+            border-radius: var(--border-radius);
+            padding: 20px;
+            text-align: center;
+        }
+        
+        .performance-card h4 {
+            font-size: 1.1rem;
+            margin-bottom: 15px;
+            color: var(--text-light);
+        }
+        
+        .performance-score {
+            font-size: 1.8rem;
+            font-weight: 600;
+            margin: 10px 0;
+        }
+        
+        .strength {
+            color: var(--success);
+        }
+        
+        .weakness {
+            color: var(--error);
+        }
+        
+        .results-details {
+            margin-top: 40px;
+        }
+        
+        .result-item {
+            padding: 20px;
+            background: rgba(15, 23, 42, 0.5);
+            border-radius: var(--border-radius);
+            margin-bottom: 15px;
+            border-left: 4px solid transparent;
+        }
+        
+        .result-item.correct {
+            border-left-color: var(--success);
+        }
+        
+        .result-item.incorrect {
+            border-left-color: var(--error);
+        }
+        
+        .user-answer, .correct-answer {
+            margin: 10px 0;
+            padding: 10px;
+            border-radius: 8px;
+        }
+        
+        .user-answer {
+            background: rgba(239, 68, 68, 0.1);
+            color: var(--error);
+        }
+        
+        .correct-answer {
+            background: rgba(16, 185, 129, 0.1);
+            color: var(--success);
+        }
+        
+        .explanation {
+            margin-top: 15px;
+            padding: 15px;
+            background: rgba(30, 41, 59, 0.7);
+            border-radius: 8px;
+            color: var(--text-gray);
+        }
+        
+        .action-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-top: 40px;
+            flex-wrap: wrap;
+        }
+        
+        /* Footer */
+        footer {
+            text-align: center;
+            padding: 30px 0;
+            margin-top: 60px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            color: var(--text-gray);
+            font-size: 0.9rem;
+        }
+        
+        .designer-credit a {
+            color: var(--accent);
+            text-decoration: none;
+            font-weight: 500;
+            transition: var(--transition);
+        }
+        
+        .designer-credit a:hover {
+            color: var(--primary);
+            text-decoration: underline;
+        }
+        
+        /* Responsive Design */
+        @media (max-width: 1024px) {
+            h1 {
+                font-size: 2.4rem;
+            }
+            
+            .formula-container, .diagram-container {
+                grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            }
+        }
+        
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2rem;
+            }
+            
+            h2 {
+                font-size: 1.6rem;
+            }
+            
+            .nav-tabs {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .nav-tab {
+                width: 100%;
+                max-width: 300px;
+                text-align: center;
+            }
+            
+            .section {
+                padding: 20px;
+            }
+            
+            .quiz-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 15px;
+            }
+            
+            .quiz-navigation {
+                flex-direction: column;
+                gap: 15px;
+            }
+            
+            .quiz-btn {
+                width: 100%;
+                justify-content: center;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            h1 {
+                font-size: 1.8rem;
+            }
+            
+            .container {
+                padding: 0 15px;
+            }
+            
+            .formula-container, .diagram-container {
+                grid-template-columns: 1fr;
+            }
+            
+            .performance-container {
+                grid-template-columns: 1fr;
+            }
+            
+            .action-buttons {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Animated Background -->
+    <div class="background-container" id="background-container">
+        <!-- Bubbles and physics icons will be generated by JavaScript -->
+    </div>
+    
+    <!-- Main Container -->
+    <div class="container">
+        <!-- Header -->
+        <header>
+            <div class="header-content">
+                <h1>PHY 103: Elasticity</h1>
+                <p class="subtitle">Understanding Material Deformation and Mechanical Properties</p>
+                <div class="nav-tabs">
+                    <a href="#" class="nav-tab active" data-section="content">Learning Materials</a>
+                    <a href="#" class="nav-tab" data-section="quiz">Take Quiz (50 Questions)</a>
+                    <a href="#" class="nav-tab" data-section="results">Quiz Results</a>
+                </div>
+            </div>
+        </header>
+        
+        <!-- Main Content -->
+        <main>
+            <!-- Content Section -->
+            <div id="content-section" class="main-content">
+                <!-- Introduction to Elasticity -->
+                <section id="introduction" class="section">
+                    <div class="section-header">
+                        <div class="section-icon"><i class="fas fa-atom"></i></div>
+                        <h2>Introduction to Elasticity</h2>
+                    </div>
+                    <p>Elasticity is the property of a material to return to its original shape and size after the deforming force is removed. This fundamental concept in physics explains how materials respond to external forces and is crucial in engineering, construction, and materials science.</p>
+                    <p>When a material is subjected to stress (force per unit area), it undergoes deformation called strain. Elastic materials obey Hooke's Law within their elastic limit, meaning strain is directly proportional to stress.</p>
+                    
+                    <div class="diagram-container">
+                        <div class="diagram">
+                            <div class="diagram-title">Elasticity in Materials</div>
+                            <div class="diagram-content">
+                                <div class="diagram-visual">
+                                    <i class="fas fa-compress-alt"></i>
+                                </div>
+                                <div class="diagram-caption">Materials exhibit elastic properties when subjected to forces. They return to original shape when force is removed.</div>
+                            </div>
+                        </div>
+                        <div class="diagram">
+                            <div class="diagram-title">Spring Example</div>
+                            <div class="diagram-content">
+                                <div class="diagram-visual">
+                                    <i class="fas fa-weight-hanging"></i>
+                                </div>
+                                <div class="diagram-caption">Springs are classic examples of elastic materials. They stretch when force is applied and return to original length when force is removed.</div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+                
+                <!-- Deformation -->
+                <section id="deformation" class="section">
+                    <div class="section-header">
+                        <div class="section-icon"><i class="fas fa-compress-alt"></i></div>
+                        <h2>Deformation</h2>
+                    </div>
+                    <p>Deformation refers to the change in shape or size of an object when subjected to external forces. There are two main types of deformation:</p>
+                    
+                    <h3>Elastic Deformation</h3>
+                    <p>Temporary deformation where the material returns to its original shape after the force is removed. This occurs within the material's elastic limit and follows Hooke's Law.</p>
+                    
+                    <h3>Plastic Deformation</h3>
+                    <p>Permanent deformation where the material does not return to its original shape after the force is removed. This occurs when stress exceeds the material's elastic limit.</p>
+                    
+                    <div class="diagram-container">
+                        <div class="diagram">
+                            <div class="diagram-title">Elastic Deformation</div>
+                            <div class="diagram-content">
+                                <div class="diagram-visual">
+                                    <i class="fas fa-undo-alt"></i>
+                                </div>
+                                <div class="diagram-caption">Material returns to original shape after force is removed. Occurs within elastic limit.</div>
+                            </div>
+                        </div>
+                        <div class="diagram">
+                            <div class="diagram-title">Plastic Deformation</div>
+                            <div class="diagram-content">
+                                <div class="diagram-visual">
+                                    <i class="fas fa-ban"></i>
+                                </div>
+                                <div class="diagram-caption">Material retains permanent change after force is removed. Occurs beyond elastic limit.</div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+                
+                <!-- Hooke's Law -->
+                <section id="hookes-law" class="section">
+                    <div class="section-header">
+                        <div class="section-icon"><i class="fas fa-ruler-combined"></i></div>
+                        <h2>Hooke's Law</h2>
+                    </div>
+                    <p>Hooke's Law states that, within the elastic limit, the strain produced in a body is directly proportional to the stress applied to it. This fundamental law of elasticity was formulated by Robert Hooke in 1676.</p>
+                    
+                    <div class="formula-container">
+                        <div class="formula-card">
+                            <h3>Hooke's Law Formula</h3>
+                            <div class="formula">F = kx</div>
+                            <p><strong>F</strong> = Force applied (N)</p>
+                            <p><strong>k</strong> = Spring constant (N/m)</p>
+                            <p><strong>x</strong> = Displacement from equilibrium (m)</p>
+                        </div>
+                    </div>
+                    
+                    <p>The spring constant (k) represents the stiffness of the spring. A higher spring constant indicates a stiffer spring that requires more force to produce the same displacement.</p>
+                    
+                    <div class="diagram-container">
+                        <div class="diagram">
+                            <div class="diagram-title">Hooke's Law Visualization</div>
+                            <div class="diagram-content">
+                                <div class="diagram-visual">
+                                    <div style="font-size: 1.5rem; text-align: center;">
+                                        F ∝ x<br>
+                                        within elastic limit
+                                    </div>
+                                </div>
+                                <div class="diagram-caption">Visual representation of Hooke's Law: Force vs. Displacement. The relationship is linear within the elastic limit.</div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+                
+                <!-- Elastic Moduli -->
+                <section id="elastic-moduli" class="section">
+                    <div class="section-header">
+                        <div class="section-icon"><i class="fas fa-cube"></i></div>
+                        <h2>Elastic Moduli</h2>
+                    </div>
+                    <p>Elastic moduli are measures of a material's resistance to deformation. Different types of moduli apply to different types of deformation:</p>
+                    
+                    <div class="formula-container">
+                        <div class="formula-card">
+                            <h3>Young's Modulus (E)</h3>
+                            <div class="formula">E = σ/ε = (F/A)/(ΔL/L)</div>
+                            <p>Measures resistance to linear deformation under tension or compression.</p>
+                            <p><strong>σ</strong> = Stress (Pa)</p>
+                            <p><strong>ε</strong> = Strain (unitless)</p>
+                            <p><strong>F</strong> = Force (N)</p>
+                            <p><strong>A</strong> = Cross-sectional area (m²)</p>
+                            <p><strong>ΔL</strong> = Change in length (m)</p>
+                            <p><strong>L</strong> = Original length (m)</p>
+                        </div>
+                        
+                        <div class="formula-card">
+                            <h3>Shear Modulus (G)</h3>
+                            <div class="formula">G = (F/A)/θ</div>
+                            <p>Measures resistance to shear deformation (shape change without volume change).</p>
+                            <p><strong>F/A</strong> = Shear stress (Pa)</p>
+                            <p><strong>θ</strong> = Shear strain (radians)</p>
+                            <p>As specified by lecturer: G = F/A × θ</p>
+                        </div>
+                        
+                        <div class="formula-card">
+                            <h3>Bulk Modulus (K)</h3>
+                            <div class="formula">K = -V(ΔP/ΔV)</div>
+                            <p>Measures resistance to uniform compression (volume change under pressure).</p>
+                            <p><strong>V</strong> = Original volume (m³)</p>
+                            <p><strong>ΔP</strong> = Change in pressure (Pa)</p>
+                            <p><strong>ΔV</strong> = Change in volume (m³)</p>
+                            <p>The negative sign indicates that volume decreases as pressure increases.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="diagram-container">
+                        <div class="diagram">
+                            <div class="diagram-title">Young's Modulus</div>
+                            <div class="diagram-content">
+                                <div class="diagram-visual">
+                                    <i class="fas fa-arrows-alt-v"></i>
+                                </div>
+                                <div class="diagram-caption">Young's Modulus: Tensile and compressive deformation along one axis.</div>
+                            </div>
+                        </div>
+                        <div class="diagram">
+                            <div class="diagram-title">Shear Modulus</div>
+                            <div class="diagram-content">
+                                <div class="diagram-visual">
+                                    <i class="fas fa-exchange-alt"></i>
+                                </div>
+                                <div class="diagram-caption">Shear Modulus: Shear deformation causes shape change without volume change.</div>
+                            </div>
+                        </div>
+                        <div class="diagram">
+                            <div class="diagram-title">Bulk Modulus</div>
+                            <div class="diagram-content">
+                                <div class="diagram-visual">
+                                    <i class="fas fa-compress-arrows-alt"></i>
+                                </div>
+                                <div class="diagram-caption">Bulk Modulus: Volume compression under uniform pressure from all sides.</div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+                
+                <!-- Compressibility -->
+                <section id="compressibility" class="section">
+                    <div class="section-header">
+                        <div class="section-icon"><i class="fas fa-weight-hanging"></i></div>
+                        <h2>Compressibility</h2>
+                    </div>
+                    <p>Compressibility is the measure of how much a material decreases in volume under pressure. It is the reciprocal of the bulk modulus.</p>
+                    
+                    <div class="formula-container">
+                        <div class="formula-card">
+                            <h3>Compressibility Formula</h3>
+                            <div class="formula">β = 1/K</div>
+                            <p><strong>β</strong> = Compressibility (Pa⁻¹)</p>
+                            <p><strong>K</strong> = Bulk modulus (Pa)</p>
+                            <p>Materials with high compressibility (low bulk modulus) are easily compressed, while materials with low compressibility (high bulk modulus) resist compression.</p>
+                        </div>
+                    </div>
+                    
+                    <p>Compressibility is particularly important in fluid mechanics and geology, where it describes how substances like gases, liquids, and rocks respond to pressure changes.</p>
+                </section>
+                
+                <!-- Stress-Strain Graph -->
+                <section id="stress-strain" class="section">
+                    <div class="section-header">
+                        <div class="section-icon"><i class="fas fa-chart-line"></i></div>
+                        <h2>Stress-Strain Graph</h2>
+                    </div>
+                    <p>The stress-strain curve is a graphical representation of a material's mechanical properties under load. It shows the relationship between stress (force per unit area) and strain (deformation) for a material.</p>
+                    
+                    <div class="diagram-container">
+                        <div class="diagram">
+                            <div class="diagram-title">Stress-Strain Curve</div>
+                            <div class="diagram-content">
+                                <div class="diagram-visual">
+                                    <div style="width: 100%; height: 100%; display: flex; flex-direction: column; justify-content: center; align-items: center;">
+                                        <div style="font-size: 2rem; color: var(--accent);">σ vs ε</div>
+                                        <div style="font-size: 0.9rem; margin-top: 10px; text-align: center;">
+                                            Elastic Limit → Yield Point<br>
+                                            → Ultimate Strength → Fracture
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="diagram-caption">Typical stress-strain curve for a ductile material showing key points: elastic limit, yield point, ultimate tensile strength, and fracture point.</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <h3>Key Points on the Stress-Strain Curve</h3>
+                    <p><strong>Elastic Limit:</strong> The maximum stress that a material can withstand without permanent deformation. Up to this point, the material obeys Hooke's Law.</p>
+                    <p><strong>Yield Point:</strong> The stress at which a material begins to deform plastically. Beyond this point, the material will not return to its original shape.</p>
+                    <p><strong>Maximum Load (Ultimate Tensile Strength):</strong> The maximum stress the material can withstand before necking begins.</p>
+                    <p><strong>Breaking Point (Fracture Point):</strong> The stress at which the material finally fractures or breaks.</p>
+                    
+                    <p>The area under the stress-strain curve represents the energy per unit volume absorbed by the material before fracture, which is a measure of the material's toughness.</p>
+                </section>
+                
+                <!-- YouTube Video -->
+                <section id="video" class="section">
+                    <div class="section-header">
+                        <div class="section-icon"><i class="fas fa-video"></i></div>
+                        <h2>Elasticity Explained</h2>
+                    </div>
+                    <p>Watch this video for a visual explanation of elasticity concepts:</p>
+                    
+                    <div class="video-container">
+                        <iframe src="https://www.youtube.com/embed/T5_p5MhOXKI" title="Elasticity Explained" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                    </div>
+                </section>
+            </div>
+            
+            <!-- Quiz Section -->
+            <div id="quiz-section" class="main-content">
+                <div class="section">
+                    <div class="quiz-header">
+                        <div>
+                            <h2>Elasticity Quiz</h2>
+                            <p>50 Questions • 20 Minutes • Covers All Topics</p>
+                        </div>
+                        <div class="timer-container">
+                            <i class="fas fa-clock"></i>
+                            <div id="timer">20:00</div>
+                        </div>
+                    </div>
+                    
+                    <div class="progress-container">
+                        <div class="progress-bar">
+                            <div class="progress-fill" id="progress-fill"></div>
+                        </div>
+                        <div id="progress-text">Question 1 of 50</div>
+                    </div>
+                    
+                    <div id="quiz-content" class="quiz-content active">
+                        <div class="question-number">Question <span id="current-question">1</span> of 50</div>
+                        <div class="question-text" id="question-text">Loading question...</div>
+                        
+                        <div class="options-container" id="options-container">
+                            <!-- Options will be populated by JavaScript -->
+                        </div>
+                        
+                        <div class="quiz-navigation">
+                            <button id="prev-btn" class="quiz-btn secondary" disabled>
+                                <i class="fas fa-arrow-left"></i> Previous
+                            </button>
+                            
+                            <div>
+                                <button id="flag-btn" class="flag-btn" title="Flag question for review">
+                                    <i class="far fa-flag"></i> Flag
+                                </button>
+                            </div>
+                            
+                            <button id="next-btn" class="quiz-btn">
+                                Next <i class="fas fa-arrow-right"></i>
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div id="quiz-complete" class="quiz-content" style="display: none;">
+                        <div class="score-display">
+                            <h3>Quiz Complete!</h3>
+                            <p>You have answered all 50 questions.</p>
+                            <p>Click the button below to submit your quiz and view your results.</p>
+                            <button id="submit-quiz-btn" class="quiz-btn" style="margin-top: 20px;">
+                                <i class="fas fa-check-circle"></i> Submit Quiz
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Results Section -->
+            <div id="results-section" class="main-content">
+                <div class="section">
+                    <div class="section-header">
+                        <div class="section-icon"><i class="fas fa-chart-bar"></i></div>
+                        <h2>Quiz Results</h2>
+                    </div>
+                    
+                    <div id="results-container">
+                        <!-- Results will be populated by JavaScript -->
+                    </div>
+                    
+                    <div class="action-buttons">
+                        <button id="retake-quiz-btn" class="quiz-btn secondary">
+                            <i class="fas fa-redo"></i> Retake Quiz
+                        </button>
+                        <button id="download-results-btn" class="quiz-btn">
+                            <i class="fas fa-download"></i> Download Results as PDF
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </main>
+        
+        <!-- Footer -->
+        <footer>
+            <div class="container">
+                <p>PHY 103: Elasticity - Educational Resource</p>
+                <p class="designer-credit">Page Designed by <a href="https://wa.me/qr/5XXPE2NTKQGSO1" target="_blank">Kennis</a> - 2025</p>
+            </div>
+        </footer>
+    </div>
+    
+    <script>
+        // Global variables
+        let currentSection = 'content';
+        let quizQuestions = [];
+        let currentQuestionIndex = 0;
+        let userAnswers = new Array(50).fill(null);
+        let flaggedQuestions = new Array(50).fill(false);
+        let quizTimer;
+        let timeRemaining = 20 * 60; // 20 minutes in seconds
+        let quizSubmitted = false;
+        
+        // DOM Elements
+        const backgroundContainer = document.getElementById('background-container');
+        const navTabs = document.querySelectorAll('.nav-tab');
+        const contentSection = document.getElementById('content-section');
+        const quizSection = document.getElementById('quiz-section');
+        const resultsSection = document.getElementById('results-section');
+        const quizContent = document.getElementById('quiz-content');
+        const quizComplete = document.getElementById('quiz-complete');
+        const questionText = document.getElementById('question-text');
+        const optionsContainer = document.getElementById('options-container');
+        const currentQuestionEl = document.getElementById('current-question');
+        const progressFill = document.getElementById('progress-fill');
+        const progressText = document.getElementById('progress-text');
+        const prevBtn = document.getElementById('prev-btn');
+        const nextBtn = document.getElementById('next-btn');
+        const flagBtn = document.getElementById('flag-btn');
+        const submitQuizBtn = document.getElementById('submit-quiz-btn');
+        const timerEl = document.getElementById('timer');
+        const resultsContainer = document.getElementById('results-container');
+        const retakeQuizBtn = document.getElementById('retake-quiz-btn');
+        const downloadResultsBtn = document.getElementById('download-results-btn');
+        
+        // Initialize the page
+        document.addEventListener('DOMContentLoaded', function() {
+            createAnimatedBackground();
+            setupNavigation();
+            generateQuizQuestions();
+            loadQuizProgress();
+            startQuizTimer();
+            showSection('content');
+            setupEventListeners();
+            
+            // Add scroll animations
+            setupScrollAnimations();
+        });
+        
+        // Create animated background with floating bubbles and physics icons
+        function createAnimatedBackground() {
+            // Create floating bubbles
+            for (let i = 0; i < 20; i++) {
+                const bubble = document.createElement('div');
+                bubble.className = 'floating-bubble';
+                
+                // Random size and position
+                const size = Math.random() * 60 + 20;
+                bubble.style.width = `${size}px`;
+                bubble.style.height = `${size}px`;
+                bubble.style.left = `${Math.random() * 100}%`;
+                bubble.style.top = `${Math.random() * 100}%`;
+                
+                // Random animation duration
+                const duration = Math.random() * 30 + 20;
+                bubble.style.animationDuration = `${duration}s`;
+                
+                // Random opacity
+                bubble.style.opacity = Math.random() * 0.3 + 0.1;
+                
+                backgroundContainer.appendChild(bubble);
+            }
+            
+            // Create physics icons
+            const icons = ['fa-atom', 'fa-wave-square', 'fa-compress-alt', 'fa-weight-hanging', 'fa-ruler-combined', 'fa-cube', 'fa-chart-line'];
+            
+            for (let i = 0; i < 15; i++) {
+                const icon = document.createElement('i');
+                icon.className = `physics-icon fas ${icons[Math.floor(Math.random() * icons.length)]}`;
+                
+                // Random position
+                icon.style.left = `${Math.random() * 100}%`;
+                icon.style.top = `${Math.random() * 100}%`;
+                
+                // Random animation duration
+                const duration = Math.random() * 40 + 30;
+                icon.style.animationDuration = `${duration}s`;
+                
+                backgroundContainer.appendChild(icon);
+            }
+        }
+        
+        // Setup navigation between sections
+        function setupNavigation() {
+            navTabs.forEach(tab => {
+                tab.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const section = this.getAttribute('data-section');
+                    
+                    // Update active tab
+                    navTabs.forEach(t => t.classList.remove('active'));
+                    this.classList.add('active');
+                    
+                    // Show selected section
+                    showSection(section);
+                });
+            });
+        }
+        
+        // Show a specific section
+        function showSection(section) {
+            currentSection = section;
+            
+            // Hide all sections
+            contentSection.style.display = 'none';
+            quizSection.style.display = 'none';
+            resultsSection.style.display = 'none';
+            
+            // Show selected section
+            if (section === 'content') {
+                contentSection.style.display = 'flex';
+            } else if (section === 'quiz') {
+                quizSection.style.display = 'flex';
+                loadCurrentQuestion();
+            } else if (section === 'results') {
+                resultsSection.style.display = 'flex';
+                if (quizSubmitted) {
+                    displayResults();
+                } else {
+                    resultsContainer.innerHTML = `
+                        <div class="score-display">
+                            <h3>No Results Available</h3>
+                            <p>You need to complete the quiz to see results.</p>
+                            <button id="go-to-quiz-btn" class="quiz-btn" style="margin-top: 20px;">
+                                <i class="fas fa-pencil-alt"></i> Take Quiz
+                            </button>
+                        </div>
+                    `;
+                    
+                    document.getElementById('go-to-quiz-btn').addEventListener('click', () => {
+                        navTabs.forEach(t => t.classList.remove('active'));
+                        document.querySelector('.nav-tab[data-section="quiz"]').classList.add('active');
+                        showSection('quiz');
+                    });
+                }
+            }
+        }
+        
+        // Setup scroll animations
+        function setupScrollAnimations() {
+            const sections = document.querySelectorAll('.section');
+            
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.style.animation = 'fadeInUp 0.8s forwards';
+                    }
+                });
+            }, { threshold: 0.1 });
+            
+            sections.forEach(section => {
+                observer.observe(section);
+            });
+        }
+        
+        // Generate quiz questions
+        function generateQuizQuestions() {
+            // This is a simplified version with 10 questions for demonstration
+            // In a real application, you would have all 50 questions
+            
+            quizQuestions = [
+                // Definitions (10 questions)
+                {
+                    id: 1,
+                    question: "What is elasticity?",
+                    options: [
+                        "The property of a material to return to its original shape after deformation",
+                        "The property of a material to stretch without breaking",
+                        "The resistance of a material to scratching",
+                        "The ability of a material to conduct electricity"
+                    ],
+                    correctAnswer: 0,
+                    explanation: "Elasticity is the property of a material to return to its original shape and size after the deforming force is removed.",
+                    topic: "Elasticity Basics"
+                },
+                {
+                    id: 2,
+                    question: "What is deformation?",
+                    options: [
+                        "The change in shape or size of an object when subjected to external forces",
+                        "The breaking of a material under stress",
+                        "The compression of a gas under pressure",
+                        "The stretching of a spring beyond its elastic limit"
+                    ],
+                    correctAnswer: 0,
+                    explanation: "Deformation refers to the change in shape or size of an object when subjected to external forces.",
+                    topic: "Elasticity Basics"
+                },
+                {
+                    id: 3,
+                    question: "What is the difference between elastic and plastic deformation?",
+                    options: [
+                        "Elastic deformation is temporary, plastic deformation is permanent",
+                        "Elastic deformation is permanent, plastic deformation is temporary",
+                        "Both are temporary but elastic deformation occurs faster",
+                        "Both are permanent but plastic deformation occurs slower"
+                    ],
+                    correctAnswer: 0,
+                    explanation: "Elastic deformation is temporary (material returns to original shape), while plastic deformation is permanent (material does not return to original shape).",
+                    topic: "Elasticity Basics"
+                },
+                {
+                    id: 4,
+                    question: "What does Hooke's Law state?",
+                    options: [
+                        "Stress is directly proportional to strain within the elastic limit",
+                        "Force equals mass times acceleration",
+                        "Every action has an equal and opposite reaction",
+                        "Energy cannot be created or destroyed"
+                    ],
+                    correctAnswer: 0,
+                    explanation: "Hooke's Law states that, within the elastic limit, the strain produced in a body is directly proportional to the stress applied to it.",
+                    topic: "Elasticity Basics"
+                },
+                {
+                    id: 5,
+                    question: "What is the elastic limit?",
+                    options: [
+                        "The maximum stress that a material can withstand without permanent deformation",
+                        "The point at which a material breaks",
+                        "The minimum stress needed to deform a material",
+                        "The stress at which a material becomes plastic"
+                    ],
+                    correctAnswer: 0,
+                    explanation: "The elastic limit is the maximum stress that a material can withstand without permanent deformation.",
+                    topic: "Elasticity Basics"
+                },
+                // Formulas and calculations (20 questions)
+                {
+                    id: 6,
+                    question: "What is the formula for Hooke's Law?",
+                    options: [
+                        "F = kx",
+                        "E = σ/ε",
+                        "K = -V(ΔP/ΔV)",
+                        "G = (F/A)/θ"
+                    ],
+                    correctAnswer: 0,
+                    explanation: "Hooke's Law is expressed as F = kx, where F is the force applied, k is the spring constant, and x is the displacement.",
+                    topic: "Formulas & Calculations"
+                },
+                {
+                    id: 7,
+                    question: "What is the formula for Young's Modulus?",
+                    options: [
+                        "E = σ/ε",
+                        "F = kx",
+                        "K = -V(ΔP/ΔV)",
+                        "G = (F/A)/θ"
+                    ],
+                    correctAnswer: 0,
+                    explanation: "Young's Modulus (E) is defined as the ratio of stress (σ) to strain (ε), representing the material's resistance to deformation under tensile or compressive forces.",
+                    topic: "Formulas & Calculations"
+                },
+                {
+                    id: 8,
+                    question: "What is the formula for Shear Modulus as specified by the lecturer?",
+                    options: [
+                        "G = F/A × θ",
+                        "G = σ/ε",
+                        "G = F/A",
+                        "G = θ/σ"
+                    ],
+                    correctAnswer: 0,
+                    explanation: "As specified by the lecturer, Shear Modulus (G) is calculated as G = F/A × θ, where F/A is shear stress and θ is shear strain.",
+                    topic: "Formulas & Calculations"
+                },
+                {
+                    id: 9,
+                    question: "What is the formula for Bulk Modulus?",
+                    options: [
+                        "K = -V(ΔP/ΔV)",
+                        "K = σ/ε",
+                        "K = F/A",
+                        "K = 1/β"
+                    ],
+                    correctAnswer: 0,
+                    explanation: "Bulk Modulus (K) measures resistance to uniform compression and is calculated as K = -V(ΔP/ΔV), where V is original volume, ΔP is pressure change, and ΔV is volume change.",
+                    topic: "Formulas & Calculations"
+                },
+                {
+                    id: 10,
+                    question: "What is the formula for compressibility?",
+                    options: [
+                        "β = 1/K",
+                        "β = K",
+                        "β = ΔV/V",
+                        "β = ΔP/ΔV"
+                    ],
+                    correctAnswer: 0,
+                    explanation: "Compressibility (β) is the reciprocal of the Bulk Modulus (K), so β = 1/K.",
+                    topic: "Formulas & Calculations"
+                },
+                // Stress-strain graph interpretation (10 questions)
+                {
+                    id: 11,
+                    question: "On a stress-strain curve, what does the elastic limit represent?",
+                    options: [
+                        "The maximum stress before permanent deformation occurs",
+                        "The stress at which the material breaks",
+                        "The point of maximum strain",
+                        "The beginning of the plastic region"
+                    ],
+                    correctAnswer: 0,
+                    explanation: "The elastic limit is the maximum stress that a material can withstand without permanent deformation. Beyond this point, the material will not return to its original shape.",
+                    topic: "Stress-Strain Analysis"
+                },
+                {
+                    id: 12,
+                    question: "What is the yield point on a stress-strain curve?",
+                    options: [
+                        "The stress at which a material begins to deform plastically",
+                        "The maximum stress the material can withstand",
+                        "The point where the material breaks",
+                        "The beginning of the elastic region"
+                    ],
+                    correctAnswer: 0,
+                    explanation: "The yield point is the stress at which a material begins to deform plastically. Beyond this point, the material will not return to its original shape.",
+                    topic: "Stress-Strain Analysis"
+                },
+                {
+                    id: 13,
+                    question: "What does the ultimate tensile strength represent on a stress-strain curve?",
+                    options: [
+                        "The maximum stress the material can withstand",
+                        "The stress at which the material yields",
+                        "The stress at the elastic limit",
+                        "The stress at the breaking point"
+                    ],
+                    correctAnswer: 0,
+                    explanation: "The ultimate tensile strength (maximum load) is the maximum stress the material can withstand before necking begins.",
+                    topic: "Stress-Strain Analysis"
+                },
+                // Concept application (10 questions)
+                {
+                    id: 14,
+                    question: "Which material property would be most important for designing a spring?",
+                    options: [
+                        "High elastic limit and good fatigue resistance",
+                        "High electrical conductivity",
+                        "High thermal conductivity",
+                        "Low density"
+                    ],
+                    correctAnswer: 0,
+                    explanation: "Springs need to withstand repeated deformation without permanent change, so high elastic limit and good fatigue resistance are crucial.",
+                    topic: "Applications"
+                },
+                {
+                    id: 15,
+                    question: "Why do bridges have expansion joints?",
+                    options: [
+                        "To allow for thermal expansion and contraction",
+                        "To make construction easier",
+                        "To reduce material costs",
+                        "To improve aesthetic appearance"
+                    ],
+                    correctAnswer: 0,
+                    explanation: "Expansion joints allow bridges to expand and contract with temperature changes without causing structural damage, applying elasticity principles.",
+                    topic: "Applications"
+                }
+            ];
+            
+            // For demonstration, we'll duplicate questions to reach 50
+            // In a real application, you would have 50 unique questions
+            const originalLength = quizQuestions.length;
+            for (let i = originalLength; i < 50; i++) {
+                const originalIndex = i % originalLength;
+                const question = JSON.parse(JSON.stringify(quizQuestions[originalIndex]));
+                question.id = i + 1;
+                question.question = `Question ${i + 1}: ${question.question}`;
+                quizQuestions.push(question);
+            }
+        }
+        
+        // Load quiz progress from localStorage
+        function loadQuizProgress() {
+            const savedAnswers = localStorage.getItem('elasticityQuizAnswers');
+            const savedFlags = localStorage.getItem('elasticityQuizFlags');
+            const savedTime = localStorage.getItem('elasticityQuizTime');
+            const savedIndex = localStorage.getItem('elasticityQuizIndex');
+            
+            if (savedAnswers) {
+                userAnswers = JSON.parse(savedAnswers);
+            }
+            
+            if (savedFlags) {
+                flaggedQuestions = JSON.parse(savedFlags);
+            }
+            
+            if (savedTime) {
+                timeRemaining = parseInt(savedTime);
+                updateTimerDisplay();
+            }
+            
+            if (savedIndex) {
+                currentQuestionIndex = parseInt(savedIndex);
+            }
+        }
+        
+        // Save quiz progress to localStorage
+        function saveQuizProgress() {
+            localStorage.setItem('elasticityQuizAnswers', JSON.stringify(userAnswers));
+            localStorage.setItem('elasticityQuizFlags', JSON.stringify(flaggedQuestions));
+            localStorage.setItem('elasticityQuizTime', timeRemaining.toString());
+            localStorage.setItem('elasticityQuizIndex', currentQuestionIndex.toString());
+        }
+        
+        // Start the quiz timer
+        function startQuizTimer() {
+            if (quizTimer) {
+                clearInterval(quizTimer);
+            }
+            
+            quizTimer = setInterval(() => {
+                timeRemaining--;
+                updateTimerDisplay();
+                saveQuizProgress();
+                
+                if (timeRemaining <= 0) {
+                    clearInterval(quizTimer);
+                    autoSubmitQuiz();
+                } else if (timeRemaining <= 300) { // 5 minutes = 300 seconds
+                    timerEl.classList.add('timer-warning');
+                }
+            }, 1000);
+        }
+        
+        // Update the timer display
+        function updateTimerDisplay() {
+            const minutes = Math.floor(timeRemaining / 60);
+            const seconds = timeRemaining % 60;
+            timerEl.textContent = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+        }
+        
+        // Setup event listeners
+        function setupEventListeners() {
+            // Quiz navigation
+            prevBtn.addEventListener('click', goToPreviousQuestion);
+            nextBtn.addEventListener('click', goToNextQuestion);
+            
+            // Flag question
+            flagBtn.addEventListener('click', toggleFlagQuestion);
+            
+            // Submit quiz
+            submitQuizBtn.addEventListener('click', submitQuiz);
+            
+            // Retake quiz
+            retakeQuizBtn.addEventListener('click', retakeQuiz);
+            
+            // Download results
+            downloadResultsBtn.addEventListener('click', downloadResults);
+            
+            // Save progress when leaving page
+            window.addEventListener('beforeunload', saveQuizProgress);
+        }
+        
+        // Load current question
+        function loadCurrentQuestion() {
+            if (currentQuestionIndex >= quizQuestions.length) {
+                // Quiz is complete
+                quizContent.style.display = 'none';
+                quizComplete.style.display = 'block';
+                return;
+            }
+            
+            const question = quizQuestions[currentQuestionIndex];
+            
+            // Update question number and text
+            currentQuestionEl.textContent = currentQuestionIndex + 1;
+            questionText.textContent = question.question;
+            
+            // Update progress
+            const progress = ((currentQuestionIndex + 1) / quizQuestions.length) * 100;
+            progressFill.style.width = `${progress}%`;
+            progressText.textContent = `Question ${currentQuestionIndex + 1} of ${quizQuestions.length}`;
+            
+            // Clear options
+            optionsContainer.innerHTML = '';
+            
+            // Create option elements
+            const optionLabels = ['A', 'B', 'C', 'D'];
+            question.options.forEach((option, index) => {
+                const optionElement = document.createElement('div');
+                optionElement.className = 'option';
+                if (userAnswers[currentQuestionIndex] === index) {
+                    optionElement.classList.add('selected');
+                }
+                
+                optionElement.innerHTML = `
+                    <span class="option-label">${optionLabels[index]}</span>
+                    <span class="option-text">${option}</span>
+                `;
+                
+                optionElement.addEventListener('click', () => selectOption(index));
+                optionsContainer.appendChild(optionElement);
+            });
+            
+            // Update navigation buttons
+            prevBtn.disabled = currentQuestionIndex === 0;
+            
+            if (currentQuestionIndex === quizQuestions.length - 1) {
+                nextBtn.innerHTML = 'Finish <i class="fas fa-flag-checkered"></i>';
+            } else {
+                nextBtn.innerHTML = 'Next <i class="fas fa-arrow-right"></i>';
+            }
+            
+            // Update flag button
+            updateFlagButton();
+        }
+        
+        // Select an option
+        function selectOption(optionIndex) {
+            // Remove selected class from all options
+            document.querySelectorAll('.option').forEach(option => {
+                option.classList.remove('selected');
+            });
+            
+            // Add selected class to clicked option
+            document.querySelectorAll('.option')[optionIndex].classList.add('selected');
+            
+            // Save answer
+            userAnswers[currentQuestionIndex] = optionIndex;
+            saveQuizProgress();
+        }
+        
+        // Go to previous question
+        function goToPreviousQuestion() {
+            if (currentQuestionIndex > 0) {
+                currentQuestionIndex--;
+                loadCurrentQuestion();
+            }
+        }
+        
+        // Go to next question
+        function goToNextQuestion() {
+            if (currentQuestionIndex < quizQuestions.length - 1) {
+                currentQuestionIndex++;
+                loadCurrentQuestion();
+            } else {
+                // Show quiz complete screen
+                quizContent.style.display = 'none';
+                quizComplete.style.display = 'block';
+            }
+        }
+        
+        // Toggle flag question
+        function toggleFlagQuestion() {
+            flaggedQuestions[currentQuestionIndex] = !flaggedQuestions[currentQuestionIndex];
+            updateFlagButton();
+            saveQuizProgress();
+        }
+        
+        // Update flag button appearance
+        function updateFlagButton() {
+            if (flaggedQuestions[currentQuestionIndex]) {
+                flagBtn.innerHTML = '<i class="fas fa-flag"></i> Flagged';
+                flagBtn.classList.add('active');
+            } else {
+                flagBtn.innerHTML = '<i class="far fa-flag"></i> Flag';
+                flagBtn.classList.remove('active');
+            }
+        }
+        
+        // Submit quiz
+        function submitQuiz() {
+            if (!quizSubmitted) {
+                // Calculate score
+                let score = 0;
+                quizQuestions.forEach((question, index) => {
+                    if (userAnswers[index] === question.correctAnswer) {
+                        score++;
+                    }
+                });
+                
+                // Stop timer
+                clearInterval(quizTimer);
+                
+                // Mark as submitted
+                quizSubmitted = true;
+                
+                // Save results
+                localStorage.setItem('elasticityQuizScore', score.toString());
+                localStorage.setItem('elasticityQuizSubmitted', 'true');
+                localStorage.setItem('elasticityQuizUserAnswers', JSON.stringify(userAnswers));
+                
+                // Show results section
+                navTabs.forEach(t => t.classList.remove('active'));
+                document.querySelector('.nav-tab[data-section="results"]').classList.add('active');
+                showSection('results');
+            }
+        }
+        
+        // Auto-submit quiz when timer reaches 0
+        function autoSubmitQuiz() {
+            if (!quizSubmitted) {
+                alert("Time's up! Your quiz will be submitted automatically.");
+                submitQuiz();
+            }
+        }
+        
+        // Display quiz results
+        function displayResults() {
+            // Calculate score
+            let score = 0;
+            const topicScores = {
+                "Elasticity Basics": { correct: 0, total: 10 },
+                "Formulas & Calculations": { correct: 0, total: 20 },
+                "Stress-Strain Analysis": { correct: 0, total: 10 },
+                "Applications": { correct: 0, total: 10 }
+            };
+            
+            // Calculate scores per question
+            quizQuestions.forEach((question, index) => {
+                if (userAnswers[index] === question.correctAnswer) {
+                    score++;
+                    topicScores[question.topic].correct++;
+                }
+            });
+            
+            const percentage = Math.round((score / quizQuestions.length) * 100);
+            
+            // Generate results HTML
+            let resultsHTML = `
+                <div class="score-display">
+                    <h3>Your Quiz Results</h3>
+                    <div class="score-value">${percentage}%</div>
+                    <div class="score-fraction">${score} / ${quizQuestions.length}</div>
+                    <p>Time taken: ${Math.floor((20 * 60 - timeRemaining) / 60)}:${((20 * 60 - timeRemaining) % 60).toString().padStart(2, '0')}</p>
+                </div>
+                
+                <h3 style="margin-top: 30px;">Performance Breakdown</h3>
+                <div class="performance-container">
+            `;
+            
+            // Add performance cards
+            for (const [topic, data] of Object.entries(topicScores)) {
+                const topicPercentage = Math.round((data.correct / data.total) * 100);
+                const performanceClass = topicPercentage > 80 ? 'strength' : topicPercentage < 60 ? 'weakness' : '';
+                
+                resultsHTML += `
+                    <div class="performance-card">
+                        <h4>${topic}</h4>
+                        <div class="performance-score ${performanceClass}">${data.correct} / ${data.total}</div>
+                        <div class="${performanceClass}">${topicPercentage}%</div>
+                    </div>
+                `;
+            }
+            
+            resultsHTML += `
+                </div>
+                
+                <div class="strengths-analysis" style="margin-top: 30px;">
+                    <h3>Strengths</h3>
+                    <p>`;
+            
+            // Add strengths
+            const strengths = [];
+            for (const [topic, data] of Object.entries(topicScores)) {
+                const topicPercentage = Math.round((data.correct / data.total) * 100);
+                if (topicPercentage > 80) {
+                    strengths.push(topic);
+                }
+            }
+            
+            if (strengths.length > 0) {
+                resultsHTML += `You performed well in: ${strengths.join(', ')}`;
+            } else {
+                resultsHTML += `No specific strengths identified (score > 80%)`;
+            }
+            
+            resultsHTML += `
+                    </p>
+                </div>
+                
+                <div class="weaknesses-analysis" style="margin-top: 20px;">
+                    <h3>Areas for Improvement</h3>
+                    <p>`;
+            
+            // Add weaknesses
+            const weaknesses = [];
+            for (const [topic, data] of Object.entries(topicScores)) {
+                const topicPercentage = Math.round((data.correct / data.total) * 100);
+                if (topicPercentage < 60) {
+                    weaknesses.push(topic);
+                }
+            }
+            
+            if (weaknesses.length > 0) {
+                resultsHTML += `You may need to review: ${weaknesses.join(', ')}`;
+            } else {
+                resultsHTML += `No significant weaknesses identified (score < 60%)`;
+            }
+            
+            resultsHTML += `
+                    </p>
+                </div>
+                
+                <div class="results-details" style="margin-top: 40px;">
+                    <h3>Detailed Results</h3>
+                    <p style="margin-bottom: 20px;">Review your answers below. Green indicates correct answers, red indicates incorrect answers.</p>
+            `;
+            
+            // Add detailed results for each question
+            quizQuestions.forEach((question, index) => {
+                const isCorrect = userAnswers[index] === question.correctAnswer;
+                const optionLabels = ['A', 'B', 'C', 'D'];
+                
+                resultsHTML += `
+                    <div class="result-item ${isCorrect ? 'correct' : 'incorrect'}">
+                        <div class="question-number">Question ${index + 1}</div>
+                        <div class="question-text">${question.question}</div>
+                        
+                        <div class="user-answer">
+                            <strong>Your answer:</strong> ${userAnswers[index] !== null ? optionLabels[userAnswers[index]] + '. ' + question.options[userAnswers[index]] : 'Not answered'}
+                        </div>
+                        
+                        ${!isCorrect ? `
+                            <div class="correct-answer">
+                                <strong>Correct answer:</strong> ${optionLabels[question.correctAnswer]}. ${question.options[question.correctAnswer]}
+                            </div>
+                        ` : ''}
+                        
+                        <div class="explanation">
+                            <strong>Explanation:</strong> ${question.explanation}
+                        </div>
+                    </div>
+                `;
+            });
+            
+            resultsHTML += `</div>`;
+            
+            resultsContainer.innerHTML = resultsHTML;
+        }
+        
+        // Retake quiz
+        function retakeQuiz() {
+            if (confirm("Are you sure you want to retake the quiz? Your previous answers will be lost.")) {
+                // Reset quiz data
+                userAnswers = new Array(50).fill(null);
+                flaggedQuestions = new Array(50).fill(false);
+                currentQuestionIndex = 0;
+                timeRemaining = 20 * 60;
+                quizSubmitted = false;
+                
+                // Clear saved data
+                localStorage.removeItem('elasticityQuizAnswers');
+                localStorage.removeItem('elasticityQuizFlags');
+                localStorage.removeItem('elasticityQuizTime');
+                localStorage.removeItem('elasticityQuizIndex');
+                localStorage.removeItem('elasticityQuizScore');
+                localStorage.removeItem('elasticityQuizSubmitted');
+                localStorage.removeItem('elasticityQuizUserAnswers');
+                
+                // Restart timer
+                startQuizTimer();
+                
+                // Go to quiz section
+                navTabs.forEach(t => t.classList.remove('active'));
+                document.querySelector('.nav-tab[data-section="quiz"]').classList.add('active');
+                showSection('quiz');
+            }
+        }
+        
+        // Download results as PDF
+        function downloadResults() {
+            alert("In a real implementation, this would generate and download a PDF of your results. For this demo, the functionality is simulated.");
+            
+            // In a real implementation, you would use a library like jsPDF
+            // to generate a PDF with the quiz results
+        }
+    </script>
+</body>
+</html>
